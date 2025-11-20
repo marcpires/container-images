@@ -1,0 +1,13 @@
+package:
+  name: git-cliff
+  version: 2.10.1
+  description: A higly customizable changelog generator
+  dependencies:
+    runtime:
+      - 
+environment:
+  contents:
+    keyring:
+      - https://packages.wolfi.dev/os/wolfi-signing.rsa.pub
+      - ./melange.rsa.pub
+
