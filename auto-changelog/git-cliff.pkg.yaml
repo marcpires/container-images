@@ -1,0 +1,35 @@
+package:
+  name: git-cliff
+  version: 2.10.1
+  description: A higly customizable changelog generator
+  target-architecture:
+    - x86_64
+    - aarch64
+  dependencies:
+    runtime:
+      - git-cliff
+
+environment:
+  contents:
+    keyring:
+      - https://packages.wolfi.dev/os/wolfi-signing.rsa.pub
+      - ./melange.rsa.pub
+    repositories:
+      - https://packages.wolfi.dev/os
+    packages:
+      - ca-certificates-bundle
+      - busybox
+      - curl
+
+pipeline:
+  - name: Build git-cliff
+    runs: |
+      set -x
+      mkdir -p "${{targets.destdir}}/usr/local/bin"
+      curl -sLO https://github.com/orhun/git-cliff/releases/download/v${{package.version}}/git-cliff-${{package.version}}-${{build.arch}}-unknown-linux-gnu.tar.gz
+      curl -sLO https://github.com/orhun/git-cliff/releases/download/v${{package.version}}/orhun-git-cliff-git-cliff.spdx.json
+      tar -xvf git-cliff-*.tar.gz
+      cp ./git-cliff-${{package.version}}/git-cliff "${{targets.destdir}}/usr/local/bin"
+      chmod +x "${{targets.destdir}}/usr/local/bin/git-cliff"
+      rm -Rf git-cliff-${{package.version}}
+      rm *.tar.gz
