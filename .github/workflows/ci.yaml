@@ -1,0 +1,22 @@
+name: Continuos integrations
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check packages to build
+        run: |
+          echo "PKGS_TO_BUILD=$(git diff --name-only ${{ github.event.pull-request.base.sha ${{ github.event.pull-request.head.sha }} -- ./*.pkg.yaml)" >> $GITHUB_ENV
+
+          if [ $? -ne 0 ]; then
+            echo "::error title=CHECK_PACKAGES:: Failed to get packages to build for revison ${{ github.ref.name }}"
+            exit 1
+          fi
+      - name: Get changed manifests
+        run: |
+          echo "Get changed"
